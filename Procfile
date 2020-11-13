@@ -1,1 +1,1 @@
-web gunicorn hospitalapp:app WEB_CONCURRENCY=1 --preload
+web gunicorn boxofficeapp:app WEB_CONCURRENCY=1 --preload

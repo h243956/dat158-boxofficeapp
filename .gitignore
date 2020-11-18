@@ -1,6 +1,6 @@
 *.pyc
 *.pyo
-boxofficeapp/
+boxofficeappenv/
 *.egg
 *.egg-info/
 .cache/

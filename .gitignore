@@ -1,0 +1,10 @@
+*.pyc
+*.pyo
+boxofficeapp/
+*.egg
+*.egg-info/
+.cache/
+.pytest_cache/
+.idea/
+docs/_build/
+.vscode

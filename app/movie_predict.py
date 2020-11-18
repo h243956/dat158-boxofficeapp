@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import joblib
+#from localpackages.custom_transformers import SelectColumnsTransformer
 
 ####### 
 ## Get the model trained in the notebook 
@@ -10,6 +11,8 @@ import joblib
 model = joblib.load('models/boxoffice_model.joblib')
 pipeline = joblib.load('models/transform_predict.joblib') 
 
+test_model = joblib.load('models/test_boxoffice_model.joblib')
+test_pipeline = joblib.load('models/test_transform_predict.joblib') 
 
 def preprocess(data):
     """
@@ -47,12 +50,12 @@ def preprocess(data):
         'original_language': "en",
         'original_title': "kaka",
         'overview': "adssada",
-        'popularity': 0.0,
+        'popularity': 12,
         'poster_path': "dasdsa",
         'production_companies': None,
         'production_countries': None,
         'release_date': 2020,
-        'runtime': None,
+        'runtime': 122,
         'spoken_languages': [{'iso_639_1': 'en', 'name': 'English'}],
         'status': "Released",
         'tagline': None,
@@ -81,7 +84,7 @@ def predict(data):
     """
     If debug, print various useful info to the terminal.
     """
- 
+    
     # Store the data in an array in the correct order:
 
     column_order = ['id', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'imdb_id', 
@@ -90,6 +93,7 @@ def predict(data):
                     'status', 'tagline', 'title', 'Keywords', 'cast', 'crew']
 
     data = np.array([data[feature] for feature in column_order], dtype=object)
+    data = pd.DataFrame(data=[data], index=["first"], columns=column_order)
 
     ## TODO work out preprocessiong of data before predicting
     ## how data looks
@@ -103,14 +107,14 @@ def predict(data):
     # predicting with the trained model. This can be achieved by saving an entire 
     # sckikit-learn pipeline, for example using joblib as in the notebook.
     
-    #transformed_data = pipeline.transform(data)
+    transformed_data = test_pipeline.transform(data)
 
     
-    #pred = model.predict(transformed_data.reshape(1,-1))
+    pred = test_model.predict(transformed_data.reshape(1,-1))
 
-    #uncertainty = model.predict_proba(transformed_data.reshape(1,-1))
+    #uncertainty = test_model.predict_proba(transformed_data.reshape(1,-1))
 
-    return data
+    return pred
 
 
 def postprocess(prediction):
@@ -118,21 +122,5 @@ def postprocess(prediction):
     Apply postprocessing to the prediction. E.g. validate the output value, add
     additional information etc. 
     """
-
-    pred, uncertainty = prediction
-
-    # Validate. As an example, if the output is an int, check that it is positive.
-    try: 
-        int(pred[0]) > 0
-    except:
-        pass
-
-    # Make strings
-    pred = str(pred[0])
-    uncertainty = str(uncertainty[0])
-
-
-    # Return
-    return_dict = {'pred': pred, 'uncertainty': uncertainty}
-
-    return return_dict
+    prediction = "Predicted revenue: " + str(prediction[0])
+    return prediction

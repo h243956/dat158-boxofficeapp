@@ -10,9 +10,10 @@ class MovieForm(FlaskForm):
     #    choices.insert(genre['id'], genre['name'])
     genres = tmdb.Genres()
     genres.movie_list()
-    genre = SelectField("Sjangrar", validators=[required()], choices=genres.genres)
+    #genre = SelectField("Sjangrar", validators=[required()], choices=genres.genres)
     budget = IntegerField("Budsjett", validators=[required()])
     popularity = FloatField("Popularitet", validators=[required()])
+    runtime = IntegerField("Lengde i minutt", validators=[required()])
 
     submit = SubmitField('Submit')
 
